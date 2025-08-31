@@ -1,0 +1,31 @@
+# 📚 Library Management System
+
+A simple Library Management System built using **Python + SQL**.  
+This project helps manage books, students, and borrowing/return records efficiently through a terminal-based interface.
+
+---
+
+## 🚀 Features
+- Add, update, and delete book records  
+- Add and manage student records  
+- Issue and return books with due-date tracking  
+- Search books by title, author, or ID  
+- View all available and borrowed books  
+- SQL database integration for data storage  
+
+---
+
+## 🛠️ Tech Stack
+- **Python** (Core logic)  
+- **MySQL** (Database management)  
+
+---
+
+## 📂 Project Structure
+library_project/
+│-- main.py # Entry point
+│-- database.py # Database connection & queries
+│-- book.py # Book management logic
+│-- student.py # Student management logic
+│-- requirements.txt # Dependencies (if any)
+│-- README.md # Project documentation
