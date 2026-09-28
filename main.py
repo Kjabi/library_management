@@ -479,11 +479,11 @@ class library :
     def issue_book(self):
         try:
                 # Get all values from Tkinter form variables
-                book_id = self.book_id.get()
-                student_id = self.student_id.get()
-                issue_date = self.issue_date.get()
-                due_date = self.due_date.get()
-                return_date = self.return_date.get()  # Can be empty at issue time
+                book_id = self.bookid.get()
+                student_id = self.memeberid.get()
+                issue_date = self.issuedate.get()
+                due_date = self.duedate.get()
+                return_date = self.returndate.get()  # Can be empty at issue time
                 fine = self.fine.get()
 
                 # Basic validation
@@ -530,13 +530,13 @@ class library :
                 publisher = self.publisher.get()
                 price = self.price.get()
                 no_of_copies = self.no_of_copies.get()
-                student_id = self.student_id.get()
+                student_id = self.memeberid.get()
                 student_name = self.student_name.get()
                 department = self.department.get()
                 phone_no = self.phone_no.get()
                 issue_id = self.issue_id.get()
-                issue_date = self.issue_date.get()
-                due_date = self.due_date.get()
+                issue_date = self.issuedate.get()
+                due_date = self.duedate.get()
 
                 # Basic validation
                 if not title or not student_id or not student_name or not issue_date or not due_date:
