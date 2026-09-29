@@ -479,11 +479,11 @@ class library :
     def issue_book(self):
         try:
                 # Get all values from Tkinter form variables
-                book_id = self.book_id.get()
-                student_id = self.student_id.get()
-                issue_date = self.issue_date.get()
-                due_date = self.due_date.get()
-                return_date = self.return_date.get()  # Can be empty at issue time
+                book_id = self.bookid.get()
+                student_id = self.memeberid.get()
+                issue_date = self.issuedate.get()
+                due_date = self.duedate.get()
+                return_date = self.returndate.get()  # Can be empty at issue time
                 fine = self.fine.get()
 
                 # Basic validation
@@ -524,19 +524,19 @@ class library :
 
     def issue_book(self):
         try:
-                # Get field values
-                title = self.title.get()
+                # Get field values (use class attributes matching __init__)
+                title = self.booktitle.get()
                 author = self.author.get()
                 publisher = self.publisher.get()
                 price = self.price.get()
-                no_of_copies = self.no_of_copies.get()
-                student_id = self.student_id.get()
-                student_name = self.student_name.get()
+                no_of_copies = self.nocopy.get()
+                student_id = self.memeberid.get()
+                student_name = self.name.get()
                 department = self.department.get()
-                phone_no = self.phone_no.get()
-                issue_id = self.issue_id.get()
-                issue_date = self.issue_date.get()
-                due_date = self.due_date.get()
+                phone_no = self.phoneno.get()
+                issue_id = self.issueid.get()
+                issue_date = self.issuedate.get()
+                due_date = self.duedate.get()
 
                 # Basic validation
                 if not title or not student_id or not student_name or not issue_date or not due_date:
@@ -567,8 +567,8 @@ class library :
 
                 messagebox.showinfo("Success", "Book issued successfully!")
 
-                # Optional: Clear fields after issuing
-                self.reset_issue_book()
+                # Clear fields after issuing
+                self.reset_librarydata()
 
         except Exception as e:
                 messagebox.showerror("Error", f"Error issuing book: {str(e)}")
