@@ -524,17 +524,17 @@ class library :
 
     def issue_book(self):
         try:
-                # Get field values
-                title = self.title.get()
+                # Get field values (use class attributes matching __init__)
+                title = self.booktitle.get()
                 author = self.author.get()
                 publisher = self.publisher.get()
                 price = self.price.get()
-                no_of_copies = self.no_of_copies.get()
+                no_of_copies = self.nocopy.get()
                 student_id = self.memeberid.get()
-                student_name = self.student_name.get()
+                student_name = self.name.get()
                 department = self.department.get()
-                phone_no = self.phone_no.get()
-                issue_id = self.issue_id.get()
+                phone_no = self.phoneno.get()
+                issue_id = self.issueid.get()
                 issue_date = self.issuedate.get()
                 due_date = self.duedate.get()
 
@@ -567,8 +567,8 @@ class library :
 
                 messagebox.showinfo("Success", "Book issued successfully!")
 
-                # Optional: Clear fields after issuing
-                self.reset_issue_book()
+                # Clear fields after issuing
+                self.reset_librarydata()
 
         except Exception as e:
                 messagebox.showerror("Error", f"Error issuing book: {str(e)}")
