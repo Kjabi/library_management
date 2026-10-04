@@ -1,208 +1,428 @@
 from tkinter import *
-from tkinter import ttk
-import random
-import datetime
-from tkinter import messagebox
+from tkinter import ttk, messagebox
 import pymysql
+from datetime import date
 
 
+class library:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Library Management System")
+        self.root.geometry("1500x950")
+        self.root.config(bg="#2C2F33")
 
-class library :
-    def __init__(self,root):
-        self.root=root
-        self.root.title("Library Management")
-        self.root.geometry("1540x800+0+0")
-        root.config(bg="#2C2F33")
+        # ================= VARIABLES =================
 
-        #variables
+        self.bookid = StringVar()
+        self.booktitle = StringVar()
+        self.author = StringVar()
+        self.publisher = StringVar()
+        self.price = StringVar()
+        self.nocopy = StringVar()
 
-        self.bookid=StringVar()
-        self.booktitle=StringVar()
-        self.author=StringVar()
-        self.publisher=StringVar()
-        self.price=StringVar()
-        self.nocopy=StringVar()
-        self.memeberid=StringVar()
-        self.name=StringVar()
-        self.department=StringVar()
-        self.phoneno=StringVar()
-        self.issueid=StringVar()
-        self.issuedate=StringVar()
-        self.duedate=StringVar()
-        self.returndate=StringVar()
-        self.fine=StringVar()
+        self.memeberid = StringVar()
+        self.name = StringVar()
+        self.department = StringVar()
+        self.phoneno = StringVar()
 
-        
+        self.issueid = StringVar()
+        self.issuedate = StringVar()
+        self.duedate = StringVar()
+        self.returndate = StringVar()
+        self.fine = StringVar()
 
+        # ================= TITLE =================
 
+        lbtitle = Label(
+            self.root,
+            bd=10,
+            relief=RIDGE,
+            text="Library Management System",
+            fg="white",
+            bg="#333333",
+            font=("Times New Roman", 35, "bold")
+        )
+        lbtitle.pack(side=TOP, fill=X)
 
+        # ================= MAIN DATA FRAME =================
 
+        DataFrame = LabelFrame(
+            self.root,
+            bd=8,
+            padx=10,
+            bg="#333333",
+            relief=RIDGE
+        )
+        DataFrame.place(x=0, y=85, width=1490, height=850)
 
+        # ================= BOOK DETAILS =================
 
+        DataFrameleft = LabelFrame(
+            DataFrame,
+            bd=2,
+            padx=10,
+            relief=RIDGE,
+            text="Book Details",
+            font=("Arial", 12, "bold")
+        )
+        DataFrameleft.place(x=1, y=1, width=720, height=300)
 
-#=============Title frame=============
-        lbtitle=Label(self.root,bd=10,relief=RIDGE,text="Library Management System",fg="white",bg="#333",font=("times new roman",50,"bold"))
-        lbtitle.pack(side=TOP,fill=X)
+        # ================= MEMBER DETAILS =================
 
+        DataFrameright = LabelFrame(
+            DataFrame,
+            bd=2,
+            padx=10,
+            relief=RIDGE,
+            text="Member Details",
+            font=("Arial", 12, "bold")
+        )
+        DataFrameright.place(x=730, y=1, width=730, height=300)
 
+        # ================= TRANSACTION DETAILS =================
 
-#===============data frame=============
-        DataFrame = LabelFrame(self.root, bd=8,padx=10,bg="#333", relief=RIDGE, font=("Arial", 12, "bold"),
-                                   )
-        DataFrame.place(x=0, y=95, width=1670, height=950)
+        DataFramertran = LabelFrame(
+            DataFrame,
+            bd=2,
+            padx=10,
+            relief=RIDGE,
+            text="Transaction Details",
+            font=("Arial", 12, "bold")
+        )
+        DataFramertran.place(x=1, y=305, width=1459, height=220)
 
+        # ================= BUTTON FRAME =================
 
-        DataFrameleft=LabelFrame(DataFrame, bd=2,padx=10, relief=RIDGE, font=("Arial", 12, "bold"),
-                                   text="Book Details")
-        DataFrameleft.place(x=1, y=1, width=810, height=320)
+        DataFramerfunc = LabelFrame(
+            DataFrame,
+            bd=2,
+            padx=10,
+            relief=RIDGE
+        )
+        DataFramerfunc.place(x=1, y=530, width=1459, height=90)
 
-        DataFrameright=LabelFrame(DataFrame, bd=2,padx=10, relief=RIDGE, font=("Arial", 12, "bold"),
-                                   text="Members Details")
-        DataFrameright.place(x=823, y=1, width=810, height=320)
+        # ================= LOG FRAME =================
 
+        DataFramerdetil = LabelFrame(
+            DataFrame,
+            bd=2,
+            padx=10,
+            relief=RIDGE,
+            text="Library Records",
+            font=("Arial", 12, "bold")
+        )
+        DataFramerdetil.place(x=1, y=625, width=1459, height=210)
 
-        DataFramertran=LabelFrame(DataFrame, bd=2,padx=10, relief=RIDGE, font=("Arial", 12, "bold"),
-                                   text="Transaction Details")
-        DataFramertran.place(y=320, width=1635, height=250)
+        # =========================================================
+        # BOOK DETAILS
+        # =========================================================
 
+        Label(
+            DataFrameleft,
+            font=("Arial", 15, "bold"),
+            text="Book ID:"
+        ).grid(row=0, column=0, sticky=W, padx=10, pady=5)
 
-        DataFramerfunc=LabelFrame(DataFrame, bd=2,padx=10, relief=RIDGE, font=("Arial", 12, "bold"),
-                                   )
-        DataFramerfunc.place(y=575, width=1635, height=100)
+        Entry(
+            DataFrameleft,
+            font=("Arial", 12, "bold"),
+            textvariable=self.bookid,
+            width=30
+        ).grid(row=0, column=1, padx=10, pady=5)
 
+        Label(
+            DataFrameleft,
+            font=("Arial", 15, "bold"),
+            text="Title:"
+        ).grid(row=1, column=0, sticky=W, padx=10, pady=5)
 
-        DataFramerdetil=LabelFrame(DataFrame, bd=2,padx=10, relief=RIDGE, font=("Arial", 12, "bold"),
-                                   text="Log")
-        DataFramerdetil.place(y=680, width=1635, height=250)
+        Entry(
+            DataFrameleft,
+            font=("Arial", 12, "bold"),
+            textvariable=self.booktitle,
+            width=30
+        ).grid(row=1, column=1, padx=10, pady=5)
 
+        Label(
+            DataFrameleft,
+            font=("Arial", 15, "bold"),
+            text="Author:"
+        ).grid(row=2, column=0, sticky=W, padx=10, pady=5)
 
+        Entry(
+            DataFrameleft,
+            font=("Arial", 12, "bold"),
+            textvariable=self.author,
+            width=30
+        ).grid(row=2, column=1, padx=10, pady=5)
 
+        Label(
+            DataFrameleft,
+            font=("Arial", 15, "bold"),
+            text="Publisher:"
+        ).grid(row=3, column=0, sticky=W, padx=10, pady=5)
 
-#=========================text fields(left(book details))============================
-       # ===================== BOOK DETAILS (LEFT) =====================
-        bookid = Label(DataFrameleft, font=("Arial", 20, "bold"), text="Book ID:")
-        bookid.grid(row=0, column=0, sticky=W, padx=10, pady=5)
-        txtbookid = Entry(DataFrameleft, font=("Arial", 13, "bold"), textvariable=self.bookid, width=35)
-        txtbookid.grid(row=0, column=1, padx=10, pady=5)
+        Entry(
+            DataFrameleft,
+            font=("Arial", 12, "bold"),
+            textvariable=self.publisher,
+            width=30
+        ).grid(row=3, column=1, padx=10, pady=5)
 
-        booktitle = Label(DataFrameleft, font=("Arial", 20, "bold"), text="Title:")
-        booktitle.grid(row=1, column=0, sticky=W, padx=10, pady=5)
-        txtbooktitle = Entry(DataFrameleft, font=("Arial", 13, "bold"), textvariable=self.booktitle, width=35)
-        txtbooktitle.grid(row=1, column=1, padx=10, pady=5)
+        Label(
+            DataFrameleft,
+            font=("Arial", 15, "bold"),
+            text="Price:"
+        ).grid(row=4, column=0, sticky=W, padx=10, pady=5)
 
-        author = Label(DataFrameleft, font=("Arial", 20, "bold"), text="Author:")
-        author.grid(row=2, column=0, sticky=W, padx=10, pady=5)
-        txtauthor = Entry(DataFrameleft, font=("Arial", 13, "bold"), textvariable=self.author, width=35)
-        txtauthor.grid(row=2, column=1, padx=10, pady=5)
+        Entry(
+            DataFrameleft,
+            font=("Arial", 12, "bold"),
+            textvariable=self.price,
+            width=30
+        ).grid(row=4, column=1, padx=10, pady=5)
 
-        publisher = Label(DataFrameleft, font=("Arial", 20, "bold"), text="Publisher:")
-        publisher.grid(row=3, column=0, sticky=W, padx=10, pady=5)
-        txtpublisher = Entry(DataFrameleft, font=("Arial", 13, "bold"), textvariable=self.publisher, width=35)
-        txtpublisher.grid(row=3, column=1, padx=10, pady=5)
+        Label(
+            DataFrameleft,
+            font=("Arial", 15, "bold"),
+            text="No Of Copies:"
+        ).grid(row=5, column=0, sticky=W, padx=10, pady=5)
 
-        price = Label(DataFrameleft, font=("Arial", 20, "bold"), text="Price:")
-        price.grid(row=4, column=0, sticky=W, padx=10, pady=5)
-        txtprice = Entry(DataFrameleft, font=("Arial", 13, "bold"), textvariable=self.price, width=35)
-        txtprice.grid(row=4, column=1, padx=10, pady=5)
+        Entry(
+            DataFrameleft,
+            font=("Arial", 12, "bold"),
+            textvariable=self.nocopy,
+            width=30
+        ).grid(row=5, column=1, padx=10, pady=5)
 
-        nocopy = Label(DataFrameleft, font=("Arial", 20, "bold"), text="No Of Copies:")
-        nocopy.grid(row=5, column=0, sticky=W, padx=10, pady=5)
-        txtnocopy = Entry(DataFrameleft, font=("Arial", 13, "bold"), textvariable=self.nocopy, width=35)
-        txtnocopy.grid(row=5, column=1, padx=10, pady=5)
+        # =========================================================
+        # MEMBER DETAILS
+        # =========================================================
 
-        # ===================== MEMBER DETAILS (RIGHT) =====================
-        membertitle = Label(DataFrameright, fg="white", bg="#333", font=("Times New Roman", 30, "bold"), text="Students Details")
-        membertitle.grid(row=0, column=0, columnspan=2, pady=5)
+        Label(
+            DataFrameright,
+            fg="white",
+            bg="#333333",
+            font=("Times New Roman", 23, "bold"),
+            text="Student Details"
+        ).grid(row=0, column=0, columnspan=2, pady=5)
 
-        memberid = Label(DataFrameright, font=("Arial", 20, "bold"), text="Student ID:")
-        memberid.grid(row=1, column=0, sticky=W, padx=10, pady=5)
-        txtmemberid = Entry(DataFrameright, font=("Arial", 13, "bold"), textvariable=self.memeberid, width=35)
-        txtmemberid.grid(row=1, column=1, padx=10, pady=5)
+        Label(
+            DataFrameright,
+            font=("Arial", 15, "bold"),
+            text="Student ID:"
+        ).grid(row=1, column=0, sticky=W, padx=10, pady=5)
 
-        name = Label(DataFrameright, font=("Arial", 20, "bold"), text="Name:")
-        name.grid(row=2, column=0, sticky=W, padx=10, pady=5)
-        txtname = Entry(DataFrameright, font=("Arial", 13, "bold"), textvariable=self.name, width=35)
-        txtname.grid(row=2, column=1, padx=10, pady=5)
+        Entry(
+            DataFrameright,
+            font=("Arial", 12, "bold"),
+            textvariable=self.memeberid,
+            width=30
+        ).grid(row=1, column=1, padx=10, pady=5)
 
-        dept = Label(DataFrameright, font=("Arial", 20, "bold"), text="Department:")
-        dept.grid(row=3, column=0, sticky=W, padx=10, pady=5)
-        txtdept = Entry(DataFrameright, font=("Arial", 13, "bold"), textvariable=self.department, width=35)
-        txtdept.grid(row=3, column=1, padx=10, pady=5)
+        Label(
+            DataFrameright,
+            font=("Arial", 15, "bold"),
+            text="Name:"
+        ).grid(row=2, column=0, sticky=W, padx=10, pady=5)
 
-        phoneno = Label(DataFrameright, font=("Arial", 20, "bold"), text="Phone No:")
-        phoneno.grid(row=4, column=0, sticky=W, padx=10, pady=5)
-        txtphoneno = Entry(DataFrameright, font=("Arial", 13, "bold"), textvariable=self.phoneno, width=35)
-        txtphoneno.grid(row=4, column=1, padx=10, pady=5)
+        Entry(
+            DataFrameright,
+            font=("Arial", 12, "bold"),
+            textvariable=self.name,
+            width=30
+        ).grid(row=2, column=1, padx=10, pady=5)
 
-        # ===================== TRANSACTION DETAILS =====================
-        trandetitle = Label(DataFramertran, fg="white", bg="#333", font=("Times New Roman", 30, "bold"), text="Transaction Details")
-        trandetitle.grid(row=0, column=0, columnspan=4, pady=10)
+        Label(
+            DataFrameright,
+            font=("Arial", 15, "bold"),
+            text="Department:"
+        ).grid(row=3, column=0, sticky=W, padx=10, pady=5)
 
-        issueid = Label(DataFramertran, font=("Arial", 20, "bold"), text="Issue ID:")
-        issueid.grid(row=1, column=0, sticky=W, padx=10, pady=5)
-        txtissueid = Entry(DataFramertran, font=("Arial", 13, "bold"), textvariable=self.issueid, width=35)
-        txtissueid.grid(row=1, column=1, padx=10, pady=5)
+        Entry(
+            DataFrameright,
+            font=("Arial", 12, "bold"),
+            textvariable=self.department,
+            width=30
+        ).grid(row=3, column=1, padx=10, pady=5)
 
-        issuedate = Label(DataFramertran, font=("Arial", 20, "bold"), text="Issue Date:")
-        issuedate.grid(row=2, column=0, sticky=W, padx=10, pady=5)
-        txtissuedate = Entry(DataFramertran, font=("Arial", 13, "bold"), textvariable=self.issuedate, width=35)
-        txtissuedate.grid(row=2, column=1, padx=10, pady=5)
+        Label(
+            DataFrameright,
+            font=("Arial", 15, "bold"),
+            text="Phone No:"
+        ).grid(row=4, column=0, sticky=W, padx=10, pady=5)
 
-        duedate = Label(DataFramertran, font=("Arial", 20, "bold"), text="Due Date:")
-        duedate.grid(row=3, column=0, sticky=W, padx=10, pady=5)
-        txtduedate = Entry(DataFramertran, font=("Arial", 13, "bold"), textvariable=self.duedate, width=35)
-        txtduedate.grid(row=3, column=1, padx=10, pady=5)
+        Entry(
+            DataFrameright,
+            font=("Arial", 12, "bold"),
+            textvariable=self.phoneno,
+            width=30
+        ).grid(row=4, column=1, padx=10, pady=5)
 
-        returndate = Label(DataFramertran, font=("Arial", 20, "bold"), text="Return Date:")
-        returndate.grid(row=1, column=2, sticky=W, padx=50, pady=5)
-        txtreturndate = Entry(DataFramertran, font=("Arial", 13, "bold"), textvariable=self.returndate, width=35)
-        txtreturndate.grid(row=1, column=3, padx=10, pady=5)
+        # =========================================================
+        # TRANSACTION DETAILS
+        # =========================================================
 
-        fine = Label(DataFramertran, font=("Arial", 20, "bold"), text="Fine:")
-        fine.grid(row=2, column=2, sticky=W, padx=50, pady=5)
-        txtfine = Entry(DataFramertran, font=("Arial", 13, "bold"), textvariable=self.fine, width=35)
-        txtfine.grid(row=2, column=3, padx=10, pady=5)
+        Label(
+            DataFramertran,
+            fg="white",
+            bg="#333333",
+            font=("Times New Roman", 23, "bold"),
+            text="Transaction Details"
+        ).grid(row=0, column=0, columnspan=4, pady=5)
 
+        Label(
+            DataFramertran,
+            font=("Arial", 15, "bold"),
+            text="Issue ID:"
+        ).grid(row=1, column=0, sticky=W, padx=10, pady=5)
 
+        Entry(
+            DataFramertran,
+            font=("Arial", 12, "bold"),
+            textvariable=self.issueid,
+            width=28
+        ).grid(row=1, column=1, padx=10, pady=5)
 
-#====================functiom button===========================
-        
-        btnaddbook = Button(DataFramerfunc, text="Add Book",command=self.addbook, bg="blue", fg="white",
-                         font=("Arial", 13, "bold"), width=16, height=2)
-        btnaddbook.grid(row=1, column=0, padx=30)
+        Label(
+            DataFramertran,
+            font=("Arial", 15, "bold"),
+            text="Issue Date:"
+        ).grid(row=2, column=0, sticky=W, padx=10, pady=5)
 
-        
+        Entry(
+            DataFramertran,
+            font=("Arial", 12, "bold"),
+            textvariable=self.issuedate,
+            width=28
+        ).grid(row=2, column=1, padx=10, pady=5)
 
-        btnupdate = Button(DataFramerfunc, text="Update",command=self.updatebook, bg="blue", fg="white",
-                         font=("Arial", 13, "bold"), width=16, height=2)
-        btnupdate.grid(row=1, column=2, padx=30)
+        Label(
+            DataFramertran,
+            font=("Arial", 15, "bold"),
+            text="Due Date:"
+        ).grid(row=3, column=0, sticky=W, padx=10, pady=5)
 
-        btndeleted = Button(DataFramerfunc, text="Delete Book",command= self.deletebook, bg="blue", fg="white",
-                         font=("Arial", 13, "bold"), width=16, height=2)
-        btndeleted.grid(row=1, column=4, padx=30)
+        Entry(
+            DataFramertran,
+            font=("Arial", 12, "bold"),
+            textvariable=self.duedate,
+            width=28
+        ).grid(row=3, column=1, padx=10, pady=5)
 
-        btnissuebook = Button(DataFramerfunc, text="Issue book",command=self.issue_book, bg="blue", fg="white",
-                         font=("Arial", 13, "bold"), width=16, height=2)
-        btnissuebook.grid(row=1, column=6, padx=30)
+        Label(
+            DataFramertran,
+            font=("Arial", 15, "bold"),
+            text="Return Date:"
+        ).grid(row=1, column=2, sticky=W, padx=50, pady=5)
 
-        btnreturnbook = Button(DataFramerfunc, text="Returnbook",command=self.return_book, bg="blue", fg="white",
-                         font=("Arial", 13, "bold"), width=16, height=2)
-        btnreturnbook.grid(row=1, column=8, padx=30)
+        Entry(
+            DataFramertran,
+            font=("Arial", 12, "bold"),
+            textvariable=self.returndate,
+            width=28
+        ).grid(row=1, column=3, padx=10, pady=5)
 
-        btnclear = Button(DataFramerfunc, text="clear",command=self.reset_librarydata, bg="blue", fg="white",
-                         font=("Arial", 13, "bold"), width=16, height=2)
-        btnclear.grid(row=1, column=10, padx=30)
+        Label(
+            DataFramertran,
+            font=("Arial", 15, "bold"),
+            text="Fine:"
+        ).grid(row=2, column=2, sticky=W, padx=50, pady=5)
 
+        Entry(
+            DataFramertran,
+            font=("Arial", 12, "bold"),
+            textvariable=self.fine,
+            width=28
+        ).grid(row=2, column=3, padx=10, pady=5)
 
-#==================scroll bar===================
+        # =========================================================
+        # BUTTONS
+        # =========================================================
 
-        # ===================== TREEVIEW (LOG / BOOK RECORDS) =====================
-        scroll_x = ttk.Scrollbar(DataFramerdetil, orient=HORIZONTAL)
-        scroll_y = ttk.Scrollbar(DataFramerdetil, orient=VERTICAL)
+        Button(
+            DataFramerfunc,
+            text="Add Book",
+            command=self.addbook,
+            bg="blue",
+            fg="white",
+            font=("Arial", 12, "bold"),
+            width=15,
+            height=2
+        ).grid(row=1, column=0, padx=15, pady=10)
+
+        Button(
+            DataFramerfunc,
+            text="Update",
+            command=self.updatebook,
+            bg="blue",
+            fg="white",
+            font=("Arial", 12, "bold"),
+            width=15,
+            height=2
+        ).grid(row=1, column=1, padx=15, pady=10)
+
+        Button(
+            DataFramerfunc,
+            text="Delete Book",
+            command=self.deletebook,
+            bg="blue",
+            fg="white",
+            font=("Arial", 12, "bold"),
+            width=15,
+            height=2
+        ).grid(row=1, column=2, padx=15, pady=10)
+
+        Button(
+            DataFramerfunc,
+            text="Issue Book",
+            command=self.issue_book,
+            bg="blue",
+            fg="white",
+            font=("Arial", 12, "bold"),
+            width=15,
+            height=2
+        ).grid(row=1, column=3, padx=15, pady=10)
+
+        Button(
+            DataFramerfunc,
+            text="Return Book",
+            command=self.return_book,
+            bg="blue",
+            fg="white",
+            font=("Arial", 12, "bold"),
+            width=15,
+            height=2
+        ).grid(row=1, column=4, padx=15, pady=10)
+
+        Button(
+            DataFramerfunc,
+            text="Clear",
+            command=self.reset_librarydata,
+            bg="blue",
+            fg="white",
+            font=("Arial", 12, "bold"),
+            width=15,
+            height=2
+        ).grid(row=1, column=5, padx=15, pady=10)
+
+        # =========================================================
+        # TREEVIEW
+        # =========================================================
+
+        scroll_x = ttk.Scrollbar(
+            DataFramerdetil,
+            orient=HORIZONTAL
+        )
+
+        scroll_y = ttk.Scrollbar(
+            DataFramerdetil,
+            orient=VERTICAL
+        )
 
         self.library = ttk.Treeview(
-        DataFramerdetil,
-        columns=(
+            DataFramerdetil,
+            columns=(
                 "BookID",
                 "Title",
                 "Author",
@@ -217,431 +437,730 @@ class library :
                 "IssueDate",
                 "DueDate",
                 "ReturnDate",
-                "Fine",
-        ),
-        xscrollcommand=scroll_x.set,
-        yscrollcommand=scroll_y.set
+                "Fine"
+            ),
+            xscrollcommand=scroll_x.set,
+            yscrollcommand=scroll_y.set
         )
 
-        scroll_x.pack(side=BOTTOM, fill=X)
-        scroll_y.pack(side=RIGHT, fill=Y)
-        scroll_x.config(command=self.library.xview)
-        scroll_y.config(command=self.library.yview)
+        scroll_x.pack(
+            side=BOTTOM,
+            fill=X
+        )
 
-        # ===================== HEADINGS =====================
-        self.library.heading("BookID", text="Book ID")
-        self.library.heading("Title", text="Title")
-        self.library.heading("Author", text="Author")
-        self.library.heading("Publisher", text="Publisher")
-        self.library.heading("Price", text="Price")
-        self.library.heading("NoOfCopies", text="No Of Copies")
-        self.library.heading("StudentID", text="Student ID")
-        self.library.heading("StudentName", text="Student Name")
-        self.library.heading("Department", text="Department")
-        self.library.heading("PhoneNo", text="Phone No")
-        self.library.heading("IssueID", text="Issue ID")
-        self.library.heading("IssueDate", text="Issue Date")
-        self.library.heading("DueDate", text="Due Date")
-        self.library.heading("ReturnDate", text="Return Date")
-        self.library.heading("Fine", text="Fine")
+        scroll_y.pack(
+            side=RIGHT,
+            fill=Y
+        )
+
+        scroll_x.config(
+            command=self.library.xview
+        )
+
+        scroll_y.config(
+            command=self.library.yview
+        )
 
         self.library["show"] = "headings"
 
-        # ===================== COLUMN WIDTHS =====================
-        self.library.column("BookID", width=100)
-        self.library.column("Title", width=150)
-        self.library.column("Author", width=140)
-        self.library.column("Publisher", width=140)
-        self.library.column("Price", width=80)
-        self.library.column("NoOfCopies", width=120)
-        self.library.column("StudentID", width=120)
-        self.library.column("StudentName", width=150)
-        self.library.column("Department", width=130)
-        self.library.column("PhoneNo", width=130)
-        self.library.column("IssueID", width=100)
-        self.library.column("IssueDate", width=120)
-        self.library.column("DueDate", width=120)
-        self.library.column("ReturnDate", width=120)
-        self.library.column("Fine", width=80)
+        headings = {
+            "BookID": "Book ID",
+            "Title": "Title",
+            "Author": "Author",
+            "Publisher": "Publisher",
+            "Price": "Price",
+            "NoOfCopies": "No Of Copies",
+            "StudentID": "Student ID",
+            "StudentName": "Student Name",
+            "Department": "Department",
+            "PhoneNo": "Phone No",
+            "IssueID": "Issue ID",
+            "IssueDate": "Issue Date",
+            "DueDate": "Due Date",
+            "ReturnDate": "Return Date",
+            "Fine": "Fine"
+        }
 
-        self.library.pack(fill=BOTH, expand=1)
-        self.library.bind("<ButtonRelease-1>",self.get_cursor)
+        for column, heading in headings.items():
+            self.library.heading(
+                column,
+                text=heading
+            )
 
+        widths = {
+            "BookID": 90,
+            "Title": 140,
+            "Author": 120,
+            "Publisher": 120,
+            "Price": 80,
+            "NoOfCopies": 100,
+            "StudentID": 100,
+            "StudentName": 130,
+            "Department": 110,
+            "PhoneNo": 110,
+            "IssueID": 90,
+            "IssueDate": 100,
+            "DueDate": 100,
+            "ReturnDate": 100,
+            "Fine": 70
+        }
+
+        for column, width in widths.items():
+            self.library.column(
+                column,
+                width=width
+            )
+
+        self.library.pack(
+            fill=BOTH,
+            expand=1
+        )
+
+        self.library.bind(
+            "<ButtonRelease-1>",
+            self.get_cursor
+        )
+
+        # Load records
         self.fetchdata()
 
-#=============functionality===========================
+    # =========================================================
+    # DATABASE CONNECTION
+    # =========================================================
+
+    def connect_database(self):
+        return pymysql.connect(
+            host="localhost",
+            user="root",
+            password="abisheek",
+            database="library_db"
+        )
+
+    # =========================================================
+    # ADD BOOK
+    # =========================================================
 
     def addbook(self):
-        if self.bookid.get()=="" or self.booktitle.get()=="":
-                messagebox.showerror("Error","All fields are required!")
-                return
-        
+
+        if (
+            self.bookid.get() == "" or
+            self.booktitle.get() == "" or
+            self.author.get() == ""
+        ):
+            messagebox.showerror(
+                "Error",
+                "Book ID, Title and Author are required!"
+            )
+            return
+
         try:
-                conn = pymysql.connect(
-                host="localhost",          
-                user="root",         # New user
-                password="abisheek",     # New password
-                database="library_db"
-                
+
+            conn = self.connect_database()
+            cursor = conn.cursor()
+
+            cursor.execute(
+                "SELECT book_id FROM library_management WHERE book_id=%s",
+                (self.bookid.get(),)
+            )
+
+            existing = cursor.fetchone()
+
+            if existing:
+                messagebox.showerror(
+                    "Error",
+                    "Book ID already exists!"
                 )
-                cursor = conn.cursor()
-                print("Connected")
-
-                cursor.execute("""
-                INSERT INTO library_management
-                (title, author, publisher, price, no_of_copies,
-                student_id, student_name, department, phone_no,
-                issue_id, issue_date, due_date, return_date, fine)
-                VALUES (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)
-                """, (
-                self.booktitle.get(),
-                self.author.get(),
-                self.publisher.get(),
-                self.price.get(),
-                self.nocopy.get(),
-                self.memeberid.get(),
-                self.name.get(),
-                self.department.get(),
-                self.phoneno.get(),
-                self.issueid.get(),
-                self.issuedate.get(),
-                self.duedate.get(),
-                self.returndate.get(),
-                self.fine.get()
-                ))
-
-                conn.commit()
-                messagebox.showinfo("Success", "Book added successfully!")
                 conn.close()
+                return
+
+            cursor.execute(
+                """
+                INSERT INTO library_management
+                (
+                    book_id,
+                    title,
+                    author,
+                    publisher,
+                    price,
+                    no_of_copies,
+                    student_id,
+                    student_name,
+                    department,
+                    phone_no,
+                    issue_id,
+                    issue_date,
+                    due_date,
+                    return_date,
+                    fine
+                )
+                VALUES
+                (
+                    %s,%s,%s,%s,%s,
+                    %s,%s,%s,%s,%s,
+                    %s,%s,%s,%s,%s
+                )
+                """,
+                (
+                    self.bookid.get(),
+                    self.booktitle.get(),
+                    self.author.get(),
+                    self.publisher.get(),
+                    self.price.get(),
+                    self.nocopy.get(),
+                    self.memeberid.get() or None,
+                    self.name.get() or None,
+                    self.department.get() or None,
+                    self.phoneno.get() or None,
+                    self.issueid.get() or None,
+                    self.issuedate.get() or None,
+                    self.duedate.get() or None,
+                    self.returndate.get() or None,
+                    self.fine.get() or 0
+                )
+            )
+
+            conn.commit()
+            conn.close()
+
+            messagebox.showinfo(
+                "Success",
+                "Book added successfully!"
+            )
+
+            self.fetchdata()
+            self.reset_librarydata(show_message=False)
 
         except Exception as e:
-                messagebox.showerror("Error", f"Database Error: {str(e)}")
-    
+
+            messagebox.showerror(
+                "Database Error",
+                str(e)
+            )
+
+    # =========================================================
+    # UPDATE BOOK
+    # =========================================================
 
     def updatebook(self):
-        if self.booktitle.get() == "" or self.author.get() == "":
-                messagebox.showerror("Error", "All Fields Are Required")
-                return
+
+        if self.bookid.get() == "":
+            messagebox.showerror(
+                "Error",
+                "Book ID is required!"
+            )
+            return
 
         try:
-                conn = pymysql.connect(
-                host="localhost",
-                user="root",
-                password="abisheek",
-                database="library_db"
-                )
-                cursor = conn.cursor()
-                print("Connected")
 
-                # Convert empty date fields to None
-                issue_date = self.issuedate.get() or None
-                due_date = self.duedate.get() or None
-                return_date = self.returndate.get() or None
+            conn = self.connect_database()
+            cursor = conn.cursor()
 
-                cursor.execute("""
+            cursor.execute(
+                """
                 UPDATE library_management
-                SET title = %s,
-                        author = %s,
-                        publisher = %s,
-                        price = %s,
-                        no_of_copies = %s,
-                        student_id = %s,
-                        student_name = %s,
-                        department = %s,
-                        phone_no = %s,
-                        issue_id = %s,
-                        issue_date = %s,
-                        due_date = %s,
-                        return_date = %s,
-                        fine = %s
-                WHERE book_id = %s
-                """, (
-                self.booktitle.get(),
-                self.author.get(),
-                self.publisher.get(),
-                self.price.get(),
-                self.nocopy.get(),
-                self.memeberid.get(),
-                self.name.get(),
-                self.department.get(),
-                self.phoneno.get(),
-                self.issueid.get(),
-                issue_date,
-                due_date,
-                return_date,
-                self.fine.get(),
-                self.bookid.get()
-                ))
+                SET
+                    title=%s,
+                    author=%s,
+                    publisher=%s,
+                    price=%s,
+                    no_of_copies=%s,
+                    student_id=%s,
+                    student_name=%s,
+                    department=%s,
+                    phone_no=%s,
+                    issue_id=%s,
+                    issue_date=%s,
+                    due_date=%s,
+                    return_date=%s,
+                    fine=%s
+                WHERE book_id=%s
+                """,
+                (
+                    self.booktitle.get(),
+                    self.author.get(),
+                    self.publisher.get(),
+                    self.price.get(),
+                    self.nocopy.get(),
+                    self.memeberid.get() or None,
+                    self.name.get() or None,
+                    self.department.get() or None,
+                    self.phoneno.get() or None,
+                    self.issueid.get() or None,
+                    self.issuedate.get() or None,
+                    self.duedate.get() or None,
+                    self.returndate.get() or None,
+                    self.fine.get() or 0,
+                    self.bookid.get()
+                )
+            )
+
+            if cursor.rowcount == 0:
+                messagebox.showwarning(
+                    "Warning",
+                    "No book found with this Book ID!"
+                )
+            else:
 
                 conn.commit()
-                conn.close()
-                messagebox.showinfo("Success", "Book details updated successfully!")
+
+                messagebox.showinfo(
+                    "Success",
+                    "Book details updated successfully!"
+                )
+
+            conn.close()
+
+            self.fetchdata()
 
         except Exception as e:
-                messagebox.showerror("Error", f"Database Error: {str(e)}")
 
-                
+            messagebox.showerror(
+                "Database Error",
+                str(e)
+            )
+
+    # =========================================================
+    # FETCH DATA
+    # =========================================================
+
     def fetchdata(self):
-          conn = pymysql.connect(
-                host="localhost",
-                user="root",
-                password="abisheek",
-                database="library_db"
+
+        try:
+
+            conn = self.connect_database()
+            cursor = conn.cursor()
+
+            cursor.execute(
+                "SELECT * FROM library_management"
+            )
+
+            rows = cursor.fetchall()
+
+            self.library.delete(
+                *self.library.get_children()
+            )
+
+            for row in rows:
+                self.library.insert(
+                    "",
+                    END,
+                    values=row
                 )
-          cursor = conn.cursor()
-          cursor.execute("SELECT * FROM library_management")
-          rows=cursor.fetchall()
-          if len(rows) != 0:
-                self.library.delete(*self.library.get_children())
-                for row in rows:
-                        self.library.insert("", END, values=row)
-                conn.commit()
-          conn.close()
 
-    def get_cursor(self, event=""):
-        cursor_row = self.library.focus()  # Get selected row's ID
-        content = self.library.item(cursor_row)  # Get data of that row
-        row = content['values']  # Extract values list
+            conn.close()
 
-        if row:  # Check if row is not empty
-                self.bookid.set(row[0])
-                self.booktitle.set(row[1])
-                self.author.set(row[2])
-                self.publisher.set(row[3])
-                self.price.set(row[4])
-                self.nocopy.set(row[5])
-                self.memeberid.set(row[6])
-                self.name.set(row[7])
-                self.department.set(row[8])
-                self.phoneno.set(row[9])
-                self.issueid.set(row[10])
-                self.issuedate.set(row[11])
-                self.duedate.set(row[12])
-                self.returndate.set(row[13])
-                self.fine.set(row[14])
+        except Exception as e:
 
+            messagebox.showerror(
+                "Database Error",
+                str(e)
+            )
+
+    # =========================================================
+    # GET SELECTED RECORD
+    # =========================================================
+
+    def get_cursor(self, event=None):
+
+        cursor_row = self.library.focus()
+
+        if not cursor_row:
+            return
+
+        content = self.library.item(cursor_row)
+
+        row = content["values"]
+
+        if row:
+
+            self.bookid.set(row[0])
+            self.booktitle.set(row[1])
+            self.author.set(row[2])
+            self.publisher.set(row[3])
+            self.price.set(row[4])
+            self.nocopy.set(row[5])
+            self.memeberid.set(row[6] if row[6] is not None else "")
+            self.name.set(row[7] if row[7] is not None else "")
+            self.department.set(row[8] if row[8] is not None else "")
+            self.phoneno.set(row[9] if row[9] is not None else "")
+            self.issueid.set(row[10] if row[10] is not None else "")
+            self.issuedate.set(row[11] if row[11] is not None else "")
+            self.duedate.set(row[12] if row[12] is not None else "")
+            self.returndate.set(row[13] if row[13] is not None else "")
+            self.fine.set(row[14] if row[14] is not None else "")
+
+    # =========================================================
+    # DELETE BOOK
+    # =========================================================
 
     def deletebook(self):
-    # Check if Book ID is provided
+
         if self.bookid.get() == "":
-                messagebox.showerror("Error", "Book ID is required to delete a record!")
+            messagebox.showerror(
+                "Error",
+                "Book ID is required!"
+            )
+            return
+
+        confirm = messagebox.askyesno(
+            "Delete",
+            "Are you sure you want to delete this book?"
+        )
+
+        if not confirm:
+            return
+
+        try:
+
+            conn = self.connect_database()
+            cursor = conn.cursor()
+
+            cursor.execute(
+                """
+                DELETE FROM library_management
+                WHERE book_id=%s
+                """,
+                (self.bookid.get(),)
+            )
+
+            if cursor.rowcount == 0:
+
+                messagebox.showwarning(
+                    "Warning",
+                    "No record found with this Book ID!"
+                )
+
+            else:
+
+                conn.commit()
+
+                messagebox.showinfo(
+                    "Success",
+                    "Book deleted successfully!"
+                )
+
+            conn.close()
+
+            self.fetchdata()
+            self.reset_librarydata(show_message=False)
+
+        except Exception as e:
+
+            messagebox.showerror(
+                "Database Error",
+                str(e)
+            )
+
+    # =========================================================
+    # ISSUE BOOK
+    # =========================================================
+
+    def issue_book(self):
+
+        try:
+
+            book_id = self.bookid.get()
+            student_id = self.memeberid.get()
+            student_name = self.name.get()
+            issue_id = self.issueid.get()
+            issue_date = self.issuedate.get()
+            due_date = self.duedate.get()
+
+            if (
+                book_id == "" or
+                student_id == "" or
+                student_name == "" or
+                issue_id == "" or
+                issue_date == "" or
+                due_date == ""
+            ):
+
+                messagebox.showerror(
+                    "Error",
+                    "Book ID, Student ID, Student Name, Issue ID, Issue Date and Due Date are required!"
+                )
                 return
 
-        try:
-                conn = pymysql.connect(
-                host="localhost",
-                user="root",
-                password="abisheek",
-                database="library_db"
-                )
-                cursor = conn.cursor()
+            conn = self.connect_database()
+            cursor = conn.cursor()
 
-                # Execute DELETE query
-                cursor.execute("DELETE FROM library_management WHERE book_id=%s", (self.bookid.get(),))
-
-                if cursor.rowcount == 0:
-                        messagebox.showwarning("Warning", "No record found with this Book ID!")
-                else:
-                        conn.commit()
-                        messagebox.showinfo("Success", "Book Deleted Successfully!")
-
-                conn.close()
-
-        except Exception as e:
-                messagebox.showerror("Error", f"Database Error: {str(e)}")
-
-                
-    def reset_librarydata(self):
-        try:
-                # Clear all entry field variables
-                self.bookid.set("")
-                self.booktitle.set("")
-                self.author.set("")
-                self.publisher.set("")
-                self.price.set("")
-                self.nocopy.set("")
-                self.memeberid.set("")
-                self.name.set("")
-                self.department.set("")
-                self.phoneno.set("")
-                self.issueid.set("")
-                self.issuedate.set("")
-                self.duedate.set("")
-                self.returndate.set("")
-                self.fine.set("")
-
-                messagebox.showinfo("Reset", "All fields have been cleared!")
-
-        except Exception as e:
-                messagebox.showerror("Error", f"Reset Error: {str(e)}")
-
-
-    def issue_book(self):
-        try:
-                # Get all values from Tkinter form variables
-                book_id = self.book_id.get()
-                student_id = self.student_id.get()
-                issue_date = self.issue_date.get()
-                due_date = self.due_date.get()
-                return_date = self.return_date.get()  # Can be empty at issue time
-                fine = self.fine.get()
-
-                # Basic validation
-                if book_id == "" or student_id == "" or issue_date == "" or due_date == "":
-                        messagebox.showerror("Error", "Book ID, Student ID, Issue Date, and Due Date are required!")
-                        return
-
-                if return_date.strip() == "":
-                        return_date = None
-
-             
-                conn = pymysql.connect(
-                host="localhost",
-                user="root",
-                password="abisheek",
-                database="library_db"
-                )
-                cursor = conn.cursor()
-
-                # SQL query with proper date handling
-                sql = """
-                INSERT INTO issue_book (book_id, student_id, issue_date, due_date, return_date, fine)
-                VALUES (%s, %s, %s, %s, %s, %s)
+            # Check whether book exists
+            cursor.execute(
                 """
-                cursor.execute(sql, (book_id, student_id, issue_date, due_date, return_date, fine))
+                SELECT no_of_copies
+                FROM library_management
+                WHERE book_id=%s
+                """,
+                (book_id,)
+            )
 
-                conn.commit()
-                conn.close()
+            book = cursor.fetchone()
 
-                messagebox.showinfo("Success", "Book issued successfully!")
-                self.reset_librarydata()  # Clear form after issuing
+            if book is None:
 
-        except Exception as e:
-                messagebox.showerror("Database Error", str(e))
-
-
-
-
-    def issue_book(self):
-        try:
-                # Get field values
-                title = self.title.get()
-                author = self.author.get()
-                publisher = self.publisher.get()
-                price = self.price.get()
-                no_of_copies = self.no_of_copies.get()
-                student_id = self.student_id.get()
-                student_name = self.student_name.get()
-                department = self.department.get()
-                phone_no = self.phone_no.get()
-                issue_id = self.issue_id.get()
-                issue_date = self.issue_date.get()
-                due_date = self.due_date.get()
-
-                # Basic validation
-                if not title or not student_id or not student_name or not issue_date or not due_date:
-                        messagebox.showerror("Error", "Please fill all required fields!")
-                        return
-
-                # Connect to MySQL
-                conn = pymysql.connect(
-                host="localhost",
-                user="root",
-                password="abisheek",
-                database="library_db"
+                messagebox.showerror(
+                    "Error",
+                    "Book not found!"
                 )
-                cursor = conn.cursor()
 
-                # Insert book issue record
-                cursor.execute("""
-                INSERT INTO library_management
-                (title, author, publisher, price, no_of_copies, student_id, student_name, department, phone_no, issue_id, issue_date, due_date)
-                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
-                """, (
-                title, author, publisher, price, no_of_copies, student_id,
-                student_name, department, phone_no, issue_id, issue_date, due_date
-                ))
-
-                conn.commit()
                 conn.close()
+                return
 
-                messagebox.showinfo("Success", "Book issued successfully!")
+            try:
+                copies = int(book[0])
+            except:
+                copies = 0
 
-                # Optional: Clear fields after issuing
-                self.reset_issue_book()
+            if copies <= 0:
+
+                messagebox.showerror(
+                    "Error",
+                    "No copies available for this book!"
+                )
+
+                conn.close()
+                return
+
+            # Check whether student already has an active book
+            cursor.execute(
+                """
+                SELECT book_id
+                FROM library_management
+                WHERE student_id=%s
+                AND return_date IS NULL
+                AND issue_date IS NOT NULL
+                """,
+                (student_id,)
+            )
+
+            existing_issue = cursor.fetchone()
+
+            if existing_issue:
+
+                messagebox.showwarning(
+                    "Warning",
+                    "This student already has an issued book!"
+                )
+
+                conn.close()
+                return
+
+            # Update book record
+            cursor.execute(
+                """
+                UPDATE library_management
+                SET
+                    no_of_copies=%s,
+                    student_id=%s,
+                    student_name=%s,
+                    department=%s,
+                    phone_no=%s,
+                    issue_id=%s,
+                    issue_date=%s,
+                    due_date=%s,
+                    return_date=NULL,
+                    fine=0
+                WHERE book_id=%s
+                """,
+                (
+                    copies - 1,
+                    self.memeberid.get(),
+                    self.name.get(),
+                    self.department.get(),
+                    self.phoneno.get(),
+                    self.issueid.get(),
+                    self.issuedate.get(),
+                    self.duedate.get(),
+                    self.bookid.get()
+                )
+            )
+
+            conn.commit()
+            conn.close()
+
+            messagebox.showinfo(
+                "Success",
+                "Book issued successfully!"
+            )
+
+            self.fetchdata()
 
         except Exception as e:
-                messagebox.showerror("Error", f"Error issuing book: {str(e)}")
 
+            messagebox.showerror(
+                "Issue Book Error",
+                str(e)
+            )
 
-
-
-
-
+    # =========================================================
+    # RETURN BOOK
+    # =========================================================
 
     def return_book(self):
-        if self.bookid.get() == "" or self.memberid.get() == "":
-                messagebox.showerror("Error", "Book ID and Member ID are required!")
-                return
+
+        if (
+            self.bookid.get() == "" or
+            self.memeberid.get() == ""
+        ):
+
+            messagebox.showerror(
+                "Error",
+                "Book ID and Student ID are required!"
+            )
+            return
 
         try:
-                conn = pymysql.connect(
-                host="localhost",
-                user="pythonuser",
-                password="yourpassword",
-                database="library"
+
+            conn = self.connect_database()
+            cursor = conn.cursor()
+
+            cursor.execute(
+                """
+                SELECT no_of_copies, issue_date, due_date
+                FROM library_management
+                WHERE book_id=%s
+                AND student_id=%s
+                AND issue_date IS NOT NULL
+                AND return_date IS NULL
+                """,
+                (
+                    self.bookid.get(),
+                    self.memeberid.get()
                 )
-                cursor = conn.cursor()
+            )
 
-                # Check if the book was issued to this member
-                cursor.execute("""
-                SELECT * FROM issued_books 
-                WHERE bookid=%s AND memberid=%s AND return_date IS NULL
-                """, (self.bookid.get(), self.memberid.get()))
-                record = cursor.fetchone()
+            record = cursor.fetchone()
 
-                if record is None:
-                        messagebox.showerror("Error", "No active issue found for this book and member!")
-                        conn.close()
-                        return
+            if record is None:
 
-                # Update the return date
-                from datetime import date
-                today = date.today()
-                cursor.execute("""
-                UPDATE issued_books
-                SET return_date=%s
-                WHERE bookid=%s AND memberid=%s AND return_date IS NULL
-                """, (today, self.bookid.get(), self.memberid.get()))
+                messagebox.showerror(
+                    "Error",
+                    "No active issue found for this book and student!"
+                )
 
-                conn.commit()
                 conn.close()
-                messagebox.showinfo("Success", f"Book ID {self.bookid.get()} returned successfully!")
+                return
+
+            copies = int(record[0])
+
+            return_date = date.today()
+
+            # Calculate fine
+            fine_amount = 0
+
+            if record[2]:
+
+                try:
+
+                    due_date = record[2]
+
+                    if hasattr(due_date, "date"):
+                        due_date = due_date.date()
+
+                    overdue_days = (
+                        return_date - due_date
+                    ).days
+
+                    if overdue_days > 0:
+                        fine_amount = overdue_days * 5
+
+                except:
+                    fine_amount = 0
+
+            cursor.execute(
+                """
+                UPDATE library_management
+                SET
+                    no_of_copies=%s,
+                    return_date=%s,
+                    fine=%s
+                WHERE book_id=%s
+                AND student_id=%s
+                AND return_date IS NULL
+                """,
+                (
+                    copies + 1,
+                    return_date,
+                    fine_amount,
+                    self.bookid.get(),
+                    self.memeberid.get()
+                )
+            )
+
+            conn.commit()
+            conn.close()
+
+            self.returndate.set(
+                str(return_date)
+            )
+
+            self.fine.set(
+                str(fine_amount)
+            )
+
+            self.fetchdata()
+
+            if fine_amount > 0:
+
+                messagebox.showinfo(
+                    "Book Returned",
+                    f"Book returned successfully!\nFine: ₹{fine_amount}"
+                )
+
+            else:
+
+                messagebox.showinfo(
+                    "Success",
+                    "Book returned successfully!"
+                )
 
         except Exception as e:
-                messagebox.showerror("Database Error", f"{str(e)}")
+
+            messagebox.showerror(
+                "Return Book Error",
+                str(e)
+            )
+
+    # =========================================================
+    # RESET
+    # =========================================================
+
+    def reset_librarydata(self, show_message=True):
+
+        self.bookid.set("")
+        self.booktitle.set("")
+        self.author.set("")
+        self.publisher.set("")
+        self.price.set("")
+        self.nocopy.set("")
+
+        self.memeberid.set("")
+        self.name.set("")
+        self.department.set("")
+        self.phoneno.set("")
+
+        self.issueid.set("")
+        self.issuedate.set("")
+        self.duedate.set("")
+        self.returndate.set("")
+        self.fine.set("")
+
+        if show_message:
+
+            messagebox.showinfo(
+                "Reset",
+                "All fields have been cleared!"
+            )
 
 
+# =============================================================
+# MAIN
+# =============================================================
 
+if __name__ == "__main__":
 
+    root = Tk()
 
+    obj = library(root)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-if __name__=="__main__":
-        root=Tk()
-        obj=library(root)
-        root.mainloop()
+    root.mainloop()
