@@ -391,8 +391,8 @@ class library :
           cursor = conn.cursor()
           cursor.execute("SELECT * FROM library_management")
           rows=cursor.fetchall()
+          self.library.delete(*self.library.get_children())
           if len(rows) != 0:
-                self.library.delete(*self.library.get_children())
                 for row in rows:
                         self.library.insert("", END, values=row)
                 conn.commit()
@@ -443,6 +443,7 @@ class library :
                         messagebox.showwarning("Warning", "No record found with this Book ID!")
                 else:
                         conn.commit()
+                        self.fetchdata()
                         messagebox.showinfo("Success", "Book Deleted Successfully!")
 
                 conn.close()
