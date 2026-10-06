@@ -11,8 +11,6 @@ class library:
         self.root.geometry("1500x950")
         self.root.config(bg="#2C2F33")
 
-        # ================= VARIABLES =================
-
         self.bookid = StringVar()
         self.booktitle = StringVar()
         self.author = StringVar()
@@ -31,8 +29,6 @@ class library:
         self.returndate = StringVar()
         self.fine = StringVar()
 
-        # ================= TITLE =================
-
         lbtitle = Label(
             self.root,
             bd=10,
@@ -44,8 +40,6 @@ class library:
         )
         lbtitle.pack(side=TOP, fill=X)
 
-        # ================= MAIN DATA FRAME =================
-
         DataFrame = LabelFrame(
             self.root,
             bd=8,
@@ -54,8 +48,6 @@ class library:
             relief=RIDGE
         )
         DataFrame.place(x=0, y=85, width=1490, height=850)
-
-        # ================= BOOK DETAILS =================
 
         DataFrameleft = LabelFrame(
             DataFrame,
@@ -67,8 +59,6 @@ class library:
         )
         DataFrameleft.place(x=1, y=1, width=720, height=300)
 
-        # ================= MEMBER DETAILS =================
-
         DataFrameright = LabelFrame(
             DataFrame,
             bd=2,
@@ -78,8 +68,6 @@ class library:
             font=("Arial", 12, "bold")
         )
         DataFrameright.place(x=730, y=1, width=730, height=300)
-
-        # ================= TRANSACTION DETAILS =================
 
         DataFramertran = LabelFrame(
             DataFrame,
@@ -91,8 +79,6 @@ class library:
         )
         DataFramertran.place(x=1, y=305, width=1459, height=220)
 
-        # ================= BUTTON FRAME =================
-
         DataFramerfunc = LabelFrame(
             DataFrame,
             bd=2,
@@ -100,8 +86,6 @@ class library:
             relief=RIDGE
         )
         DataFramerfunc.place(x=1, y=530, width=1459, height=90)
-
-        # ================= LOG FRAME =================
 
         DataFramerdetil = LabelFrame(
             DataFrame,
@@ -112,10 +96,6 @@ class library:
             font=("Arial", 12, "bold")
         )
         DataFramerdetil.place(x=1, y=625, width=1459, height=210)
-
-        # =========================================================
-        # BOOK DETAILS
-        # =========================================================
 
         Label(
             DataFrameleft,
@@ -195,10 +175,6 @@ class library:
             width=30
         ).grid(row=5, column=1, padx=10, pady=5)
 
-        # =========================================================
-        # MEMBER DETAILS
-        # =========================================================
-
         Label(
             DataFrameright,
             fg="white",
@@ -258,10 +234,6 @@ class library:
             textvariable=self.phoneno,
             width=30
         ).grid(row=4, column=1, padx=10, pady=5)
-
-        # =========================================================
-        # TRANSACTION DETAILS
-        # =========================================================
 
         Label(
             DataFramertran,
@@ -336,10 +308,6 @@ class library:
             width=28
         ).grid(row=2, column=3, padx=10, pady=5)
 
-        # =========================================================
-        # BUTTONS
-        # =========================================================
-
         Button(
             DataFramerfunc,
             text="Add Book",
@@ -405,10 +373,6 @@ class library:
             width=15,
             height=2
         ).grid(row=1, column=5, padx=15, pady=10)
-
-        # =========================================================
-        # TREEVIEW
-        # =========================================================
 
         scroll_x = ttk.Scrollbar(
             DataFramerdetil,
@@ -521,12 +485,7 @@ class library:
             self.get_cursor
         )
 
-        # Load records
         self.fetchdata()
-
-    # =========================================================
-    # DATABASE CONNECTION
-    # =========================================================
 
     def connect_database(self):
         return pymysql.connect(
@@ -535,10 +494,6 @@ class library:
             password="abisheek",
             database="library_db"
         )
-
-    # =========================================================
-    # ADD BOOK
-    # =========================================================
 
     def addbook(self):
 
@@ -637,10 +592,6 @@ class library:
                 str(e)
             )
 
-    # =========================================================
-    # UPDATE BOOK
-    # =========================================================
-
     def updatebook(self):
 
         if self.bookid.get() == "":
@@ -695,10 +646,12 @@ class library:
             )
 
             if cursor.rowcount == 0:
+
                 messagebox.showwarning(
                     "Warning",
                     "No book found with this Book ID!"
                 )
+
             else:
 
                 conn.commit()
@@ -719,15 +672,17 @@ class library:
                 str(e)
             )
 
-    # =========================================================
-    # FETCH DATA
-    # =========================================================
-
     def fetchdata(self):
 
         try:
 
-            conn = self.connect_database()
+            conn = pymysql.connect(
+                host="localhost",
+                user="root",
+                password="abisheek",
+                database="library_db"
+            )
+
             cursor = conn.cursor()
 
             cursor.execute(
@@ -740,12 +695,15 @@ class library:
                 *self.library.get_children()
             )
 
-            for row in rows:
-                self.library.insert(
-                    "",
-                    END,
-                    values=row
-                )
+            if len(rows) != 0:
+
+                for row in rows:
+
+                    self.library.insert(
+                        "",
+                        END,
+                        values=row
+                    )
 
             conn.close()
 
@@ -755,10 +713,6 @@ class library:
                 "Database Error",
                 str(e)
             )
-
-    # =========================================================
-    # GET SELECTED RECORD
-    # =========================================================
 
     def get_cursor(self, event=None):
 
@@ -779,19 +733,33 @@ class library:
             self.publisher.set(row[3])
             self.price.set(row[4])
             self.nocopy.set(row[5])
-            self.memeberid.set(row[6] if row[6] is not None else "")
-            self.name.set(row[7] if row[7] is not None else "")
-            self.department.set(row[8] if row[8] is not None else "")
-            self.phoneno.set(row[9] if row[9] is not None else "")
-            self.issueid.set(row[10] if row[10] is not None else "")
-            self.issuedate.set(row[11] if row[11] is not None else "")
-            self.duedate.set(row[12] if row[12] is not None else "")
-            self.returndate.set(row[13] if row[13] is not None else "")
-            self.fine.set(row[14] if row[14] is not None else "")
-
-    # =========================================================
-    # DELETE BOOK
-    # =========================================================
+            self.memeberid.set(
+                row[6] if row[6] is not None else ""
+            )
+            self.name.set(
+                row[7] if row[7] is not None else ""
+            )
+            self.department.set(
+                row[8] if row[8] is not None else ""
+            )
+            self.phoneno.set(
+                row[9] if row[9] is not None else ""
+            )
+            self.issueid.set(
+                row[10] if row[10] is not None else ""
+            )
+            self.issuedate.set(
+                row[11] if row[11] is not None else ""
+            )
+            self.duedate.set(
+                row[12] if row[12] is not None else ""
+            )
+            self.returndate.set(
+                row[13] if row[13] is not None else ""
+            )
+            self.fine.set(
+                row[14] if row[14] is not None else ""
+            )
 
     def deletebook(self):
 
@@ -834,26 +802,48 @@ class library:
 
                 conn.commit()
 
+                self.fetchdata()
+
                 messagebox.showinfo(
                     "Success",
-                    "Book deleted successfully!"
+                    "Book Deleted Successfully!"
                 )
 
             conn.close()
 
-            self.fetchdata()
-            self.reset_librarydata(show_message=False)
-
         except Exception as e:
 
             messagebox.showerror(
-                "Database Error",
-                str(e)
+                "Error",
+                f"Database Error: {str(e)}"
             )
 
-    # =========================================================
-    # ISSUE BOOK
-    # =========================================================
+    def reset_librarydata(self, show_message=True):
+
+        self.bookid.set("")
+        self.booktitle.set("")
+        self.author.set("")
+        self.publisher.set("")
+        self.price.set("")
+        self.nocopy.set("")
+
+        self.memeberid.set("")
+        self.name.set("")
+        self.department.set("")
+        self.phoneno.set("")
+
+        self.issueid.set("")
+        self.issuedate.set("")
+        self.duedate.set("")
+        self.returndate.set("")
+        self.fine.set("")
+
+        if show_message:
+
+            messagebox.showinfo(
+                "Reset",
+                "All fields have been cleared!"
+            )
 
     def issue_book(self):
 
@@ -884,7 +874,6 @@ class library:
             conn = self.connect_database()
             cursor = conn.cursor()
 
-            # Check whether book exists
             cursor.execute(
                 """
                 SELECT no_of_copies
@@ -921,7 +910,6 @@ class library:
                 conn.close()
                 return
 
-            # Check whether student already has an active book
             cursor.execute(
                 """
                 SELECT book_id
@@ -945,7 +933,6 @@ class library:
                 conn.close()
                 return
 
-            # Update book record
             cursor.execute(
                 """
                 UPDATE library_management
@@ -991,10 +978,6 @@ class library:
                 "Issue Book Error",
                 str(e)
             )
-
-    # =========================================================
-    # RETURN BOOK
-    # =========================================================
 
     def return_book(self):
 
@@ -1045,7 +1028,6 @@ class library:
 
             return_date = date.today()
 
-            # Calculate fine
             fine_amount = 0
 
             if record[2]:
@@ -1121,41 +1103,6 @@ class library:
                 str(e)
             )
 
-    # =========================================================
-    # RESET
-    # =========================================================
-
-    def reset_librarydata(self, show_message=True):
-
-        self.bookid.set("")
-        self.booktitle.set("")
-        self.author.set("")
-        self.publisher.set("")
-        self.price.set("")
-        self.nocopy.set("")
-
-        self.memeberid.set("")
-        self.name.set("")
-        self.department.set("")
-        self.phoneno.set("")
-
-        self.issueid.set("")
-        self.issuedate.set("")
-        self.duedate.set("")
-        self.returndate.set("")
-        self.fine.set("")
-
-        if show_message:
-
-            messagebox.showinfo(
-                "Reset",
-                "All fields have been cleared!"
-            )
-
-
-# =============================================================
-# MAIN
-# =============================================================
 
 if __name__ == "__main__":
 
